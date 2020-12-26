@@ -1,11 +1,12 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <stdlib.h>
+#include <stdio.h>
 
 #define AS_INT 0
 #define AS_INT_HEX 1
 #define AS_CHAR 2
-
-#ifndef VECTOR_H
-#define VECTOR_H
 
 typedef struct {
 	int maxSize;
@@ -13,68 +14,11 @@ typedef struct {
 	int* data;
 } Vector;
 
-Vector initVector(int s){
-	Vector v = {
-		.maxSize = s,
-		.count = 0,
-		.data = malloc(s*sizeof(int))
-	};
-
-	return v;
-}
-
-void deleteVector(Vector* v){
-	v->maxSize = 0;
-	v->count = 0;
-	free(v->data);
-	v->data=NULL;
-}
-
-
-
-
-void vectorPush(Vector* v,int val){
-	if (v->count==v->maxSize){
-		printf("ERROR : Vector is full");
-		exit(-1);
-	}
-	
-	v->data[v->count++]=val;
-}
-
-
-int vectorPop(Vector* v){
-	if (!v->count){
-		printf("ERROR : Vector is empty");
-		exit(-1);
-	}
-
-	return v->data[--v->count];
-}
-
-void printVector(Vector* v,int flag){
-	printf("[");
-	for (int i=0;i < v->count;i++){
-
-                switch (flag){
-                        case AS_CHAR:
-                                printf("%c",v->data[i]);
-                                break;
-                        case AS_INT_HEX:
-                                printf("%x",v->data[i]);
-                                break;
-                        default:
-                                printf("%d",v->data[i]);
-		}
-
-		if (i!=v->count-1)
-			printf(",");
-	}
-	printf("]\n");
-}
-
-
-
+Vector initVector(int s);
+void deleteVector(Vector* v);
+void vectorPush(Vector* v,int val);
+int vectorPop(Vector* v);
+void printVector(Vector* v,int flag);
 
 
 #endif
