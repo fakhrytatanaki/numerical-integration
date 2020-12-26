@@ -1,8 +1,8 @@
+#include "mathfuncs.h"
 #include <stdio.h>
 #include "treenode.h"
 #include "strsearch.h"
 #include "vector.h"
-#include "mathfuncs.h"
 
 int main(){
 	mathfunc_t* funcs = getMathFuncs();

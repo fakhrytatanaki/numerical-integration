@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include "mathfuncs.h"
 #include <string.h>
 #include "treenode.h"
 #ifndef STRSEARCH_H
 #define STRSEARCH_H
+
 
 
 Node* constructTrie(int strc,const char** strv){
@@ -87,10 +89,13 @@ void linkObjectsToTrieNodes(Node* root,const char** stringMap,void* objMap,int n
 	int isFound;
 	Node* found;
 
-	for (int i=0;i < n;i++){
-		printf("obj addr. : %x\n",objMap + i);
-		isFound = strSearch(stringMap[i],root,&found);
+	mathfunc_t* test;
 
+	for (int i=0;i < n;i++){
+		printf("(strsearch) obj addr. : %x\n",objMap + i);
+		test = (mathfunc_t*)(objMap+i); 
+		printf("objmap val : %d\n",test->nargs);
+		isFound = strSearch(stringMap[i],root,&found);
 		if (!isFound){
 			printf("TRIE KEY MAP ERROR : no match for string at index %d\n",i);
 			exit(-1);
