@@ -127,13 +127,20 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					i--;
 
 					Node* foundObj;	
-					int isFound = strSearch(tmpString,funcTrie,&foundObj);
-					if (!isFound){
+					int funcIsFound = strSearch(tmpString,funcTrie,&foundObj);
+					int varIsFound = strSearch(tmpString,varTrie,&foundObj);
+
+					if (!funcIsFound && !varIsFound){
+
 						printf("ERROR : unknown variable or function name \' %s \'\n",tmpString);
 						exit(-1);
+
 					}
-					else 
+					else if (varIsFound) 
 						strcat(strOut,tmpString);
+					
+
+					
 
 					tmpString[0]=0;
 					
@@ -145,11 +152,11 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 			}
 			
-		
 			else if (s.count==0) //if stack is empty and you have an operator in your hand, push it to stack
 				vectorPush(&s,c1);
 
 			else{ 
+
 				c2 = vectorPop(&s); //pop a second operator off the stack
 				p2 = precedence(c2); // then get its precedence
 				
