@@ -1,18 +1,12 @@
 #pragma once
 #include "strsearch.h"
 #include <math.h>
+#include "mathfuncs_struct.h"
 #ifndef MATHFUNCS_H
 #define MATHFUNCS_H
 
 
-struct _mathfunc_t{
-	int id;
-	int nargs;
-	double (*func1a)(double);
-	double (*func2a)(double,double);
-} ;
 
-typedef struct _mathfunc_t mathfunc_t;
 const char* mathfunc_names[] = {"pow","exp","ln","sin","cos","sinh","cosh","asin","acos","asinh","acosh"};
 int funcsCount = sizeof(mathfunc_names)/sizeof(mathfunc_names[0]);
 

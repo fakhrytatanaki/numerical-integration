@@ -1,11 +1,11 @@
-#include <stdio.h>
-#include "mathfuncs.h"
-#include <string.h>
-#include "treenode.h"
+
+
 #ifndef STRSEARCH_H
 #define STRSEARCH_H
-
-
+#include <stdio.h>
+#include <string.h>
+#include "treenode.h"
+#include "mathfuncs_struct.h"
 
 Node* constructTrie(int strc,const char** strv){
 
