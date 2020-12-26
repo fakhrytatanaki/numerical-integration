@@ -51,14 +51,15 @@ Node* constructTrie(int strc,const char** strv){
 
 
 int strSearch(const char* str,Node* current,Node** foundNode){
-		
 	int i = 0;
 	for (int j=0;j < current->count;j++){
+
 
 		if (str[i]==0 && i==0)
 			return 0;
 		
 		if (str[i]==current->next[j]->value) {
+
 			current = current->next[j];
 			i++;
 			j=-1;
@@ -66,28 +67,28 @@ int strSearch(const char* str,Node* current,Node** foundNode){
 
 		if (str[i]==0){
 			
-			if (foundNode!=NULL)
+
+			if (foundNode!=NULL){
 				*foundNode=current;
+			}
 
 			return 1;
 		}
 
 	}
 
+	
 	return 0;
 }
 
 
-void linkObjectsToTrieNodes(Node* root,const char** stringMap,void* objMap){
+void linkObjectsToTrieNodes(Node* root,const char** stringMap,void* objMap,int n){
 
-	int n = sizeof(objMap)/sizeof(void*);
 	int isFound;
-
-	assert(n==(sizeof(stringMap)/sizeof(stringMap[0])));
 	Node* found;
 
 	for (int i=0;i < n;i++){
-
+		printf("obj addr. : %x\n",objMap + i);
 		isFound = strSearch(stringMap[i],root,&found);
 
 		if (!isFound){
