@@ -35,7 +35,10 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 	assert(funcTrie!=NULL);
 	char tmp;	
-	char tmpstr[32];
+	char tmpString[32];
+	tmpString[0]=0;
+
+
 	int n = strlen(strIn); //strlen calculates the size of a string
 	Vector s = initVector(n); //initalising a stack
 	
@@ -111,13 +114,29 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 				}
 
 				else{
-					while ( precedence(c1)==-1 && !(c1==' ' || c1=='(' || c1==')') ){
-						charcat(tmpstr,c1);
-						c1 = strIn[i++];
+				
+
+					while ( precedence(c1)==-1 && !(c1==' ' || c1=='(' || c1==')') && i < n ){
+						charcat(tmpString,c1);
+
+						c1 = strIn[++i];
+
 					}
+
+					charcat(tmpString,0);
 					i--;
+
 					Node* foundObj;	
-					int isFound = strSearch(tmpstr,funcTrie,&foundObj);
+					int isFound = strSearch(tmpString,funcTrie,&foundObj);
+					if (!isFound){
+						printf("ERROR : unknown variable or function name \' %s \'\n",tmpString);
+						exit(-1);
+					}
+					else 
+						strcat(strOut,tmpString);
+
+					tmpString[0]=0;
+					
 
 				}
 
@@ -162,10 +181,13 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 int main(int argc,char** argv){
 	char out[128];			
 	out[0]=0;
-
+	
+	const char* testvars[] = {"x","y","john"};
+	Node* varTrie = constructTrie(3,testvars);
 	mathfunc_t** funcs = getMathFuncs();
+	Node* funcTrie = constructFuncNameTrie(funcs);
 
-	toPostFix(argv[1],out,128);
+	toPostFix(argv[1],out,128,funcTrie,varTrie);
 	printf("%s\n",out);
 	
 	return 0;
