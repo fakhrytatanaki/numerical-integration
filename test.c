@@ -5,14 +5,17 @@
 #include "mathfuncs.h"
 
 int main(){
-	getMathFuncs(mathfuncs);
-	Node* tree = constructFuncNameTrie(mathfuncs);
-
+	mathfunc_t funcs[funcsCount];
+	Node* n = constructFuncNameTrie(funcs);
 	Node* found;
-	for (int i=0;i < 7;i++){
-		strSearch(mathfunc_names[i],tree,&found);
+
+	for (int i=0;i<funcsCount;i++)
+		printf("%s\n",mathfunc_names[i]);
+
+	for (int i=0;i<funcsCount;i++){
+		strSearch(mathfunc_names[i],n,&found);
 		printf("%d\n",((mathfunc_t*)found->obj)->id);
 	}
-
+	
 	return 0;
 }

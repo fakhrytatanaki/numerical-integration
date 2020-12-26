@@ -5,13 +5,14 @@
 #define STRSEARCH_H
 
 
-Node* constructTrie(int strc, char** strv){
+Node* constructTrie(int strc,const char** strv){
+
 	int maxlen=0;
 	int nxtValInd;
 	int len[strc];
 	Node* found;
-
 	for (int i=0;i<strc;i++){
+
 		len[i] = strlen(strv[i]);
 
 		if (len[i] > maxlen)
@@ -26,7 +27,6 @@ Node* constructTrie(int strc, char** strv){
 		current = root;
 
 		for (int j=0;j<len[i];j++){
-
 			nxtValInd = findNextVal(strv[i][j],current,&found);
 			if (nxtValInd==-1){
 				tmp = newRoot(strc);
@@ -50,7 +50,7 @@ Node* constructTrie(int strc, char** strv){
 
 
 
-int strSearch(char* str,Node* current,Node** foundNode){
+int strSearch(const char* str,Node* current,Node** foundNode){
 		
 	int i = 0;
 	for (int j=0;j < current->count;j++){
@@ -75,6 +75,28 @@ int strSearch(char* str,Node* current,Node** foundNode){
 	}
 
 	return 0;
+}
+
+
+void linkObjectsToTrieNodes(Node* root,const char** stringMap,void* objMap){
+
+	int n = sizeof(objMap)/sizeof(void*);
+	int isFound;
+
+	assert(n==(sizeof(stringMap)/sizeof(stringMap[0])));
+	Node* found;
+
+	for (int i=0;i < n;i++){
+
+		isFound = strSearch(stringMap[i],root,&found);
+
+		if (!isFound){
+			printf("TRIE KEY MAP ERROR : no match for string at index %d\n",i);
+			exit(-1);
+		}
+
+		found->obj = objMap+i;
+	}	
 }
 
 
