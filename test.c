@@ -5,7 +5,7 @@
 #include "vector.h"
 
 int main(){
-	mathfunc_t* funcs = getMathFuncs();
+	mathfunc_t** funcs = getMathFuncs();
 	Node* n = constructFuncNameTrie(funcs);
 	Node* found;
 	int f;
@@ -13,13 +13,11 @@ int main(){
 	
 
 	for (int i=0;i<funcsCount;i++){
-		strSearch(mathfunc_names[i],n,&found);
-
-		// printf("obj addr. test: %x\n",found->obj);
-		// printf("key : %d\n",((mathfunc_t*)found->obj)->id);
+		f = strSearch(mathfunc_names[i],n,&found);
+		printf("val : %d\n",((mathfunc_t*) (found->obj))->id );
 	}
 	
-	free(funcs);
-	
+	deleteFuncsFromHeap(funcs);	
+
 	return 0;
 }

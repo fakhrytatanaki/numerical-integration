@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "treenode.h"
-#include "mathfuncs_struct.h"
 
 Node* constructTrie(int strc,const char** strv){
 
@@ -84,24 +83,21 @@ int strSearch(const char* str,Node* current,Node** foundNode){
 }
 
 
-void linkObjectsToTrieNodes(Node* root,const char** stringMap,void* objMap,int n){
+void linkObjectsToTrieNodes(Node* root,const char** stringMap,void** objMap,int n){
 
 	int isFound;
 	Node* found;
 
-	mathfunc_t* test;
 
 	for (int i=0;i < n;i++){
-		printf("(strsearch) obj addr. : %x\n",objMap + i);
-		test = (mathfunc_t*)(objMap+i); 
-		printf("objmap val : %d\n",test->nargs);
+
 		isFound = strSearch(stringMap[i],root,&found);
 		if (!isFound){
 			printf("TRIE KEY MAP ERROR : no match for string at index %d\n",i);
 			exit(-1);
 		}
 
-		found->obj = objMap+i;
+		found->obj = objMap[i];
 	}	
 }
 
