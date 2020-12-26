@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "vector.h"
 #include "strsearch.h"
+#include "mathfuncs.h"
 #define ui8 unsigned char
 
 
@@ -26,6 +27,7 @@ int precedence(char a){ // evaluates the precedence of the operator
 			return -1; // -1 is returned as precedence if the character is not a primitive operator
 
 	}
+}
 
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // converts infix (strIn) to postfix notation (strOut)
  //an implementation of the shunting-yard algorithm
@@ -33,7 +35,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 	assert(funcTrie!=NULL);
 	char tmp;	
-	char[32] tmpstr;
+	char tmpstr[32];
 	int n = strlen(strIn); //strlen calculates the size of a string
 	Vector s = initVector(n); //initalising a stack
 	
@@ -115,7 +117,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					}
 					i--;
 					Node* foundObj;	
-					int isFound = strSearch(tmpstr,
+					int isFound = strSearch(tmpstr,funcTrie,&foundObj);
 
 				}
 
@@ -160,6 +162,8 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 int main(int argc,char** argv){
 	char out[128];			
 	out[0]=0;
+
+	mathfunc_t** funcs = getMathFuncs();
 
 	toPostFix(argv[1],out,128);
 	printf("%s\n",out);
