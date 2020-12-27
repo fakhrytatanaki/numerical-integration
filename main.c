@@ -7,6 +7,27 @@
 #define ui8 unsigned char
 
 
+void charcat(char* str,char c);
+int precedence(char a);
+void printPostfix(const char* out);
+void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie);
+
+int main(int argc,char** argv){
+	char out[128];			
+	out[0]=0;
+	
+	const char* testvars[] = {"x","y","john"};
+	Node* varTrie = constructTrie(3,testvars);
+	mathfunc_t** funcs = getMathFuncs();
+	Node* funcTrie = constructFuncNameTrie(funcs);
+
+	toPostFix(argv[1],out,128,funcTrie,varTrie);
+	printPostfix(out);
+	
+	return 0;
+}
+
+
 void charcat(char* str,char c){ //concatenates a character to a string
 	char tmp[2];
 	tmp[1]=0;
@@ -226,18 +247,4 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 }
 
-int main(int argc,char** argv){
-	char out[128];			
-	out[0]=0;
-	
-	const char* testvars[] = {"x","y","john"};
-	Node* varTrie = constructTrie(3,testvars);
-	mathfunc_t** funcs = getMathFuncs();
-	Node* funcTrie = constructFuncNameTrie(funcs);
-
-	toPostFix(argv[1],out,128,funcTrie,varTrie);
-	printPostfix(out);
-	
-	return 0;
-}
 
