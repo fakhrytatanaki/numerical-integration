@@ -12,7 +12,7 @@ int main(){
 
 	
 
-	for (int i=0;i<funcsCount;i++){
+	for (int i=0;i<mathFuncsCount;i++){
 		f = strSearch(mathfunc_names[i],n,&found);
 		printf("val : %d\n",((mathfunc_t*) (found->obj))->id );
 	}

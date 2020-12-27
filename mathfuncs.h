@@ -5,16 +5,17 @@
 #include "strsearch.h"
 #include <math.h>
 #include "mathfuncs_struct.h"
+#define MATHFUNC_ID_START 16
 
 
 const char* mathfunc_names[] = {"pow","exp","ln","sin","cos","sinh","cosh","asin","acos","asinh","acosh"};
-int funcsCount = sizeof(mathfunc_names)/sizeof(mathfunc_names[0]);
+const int mathfunc_count = sizeof(mathfunc_names)/sizeof(mathfunc_names[0]);
 
 mathfunc_t** getMathFuncs(){
-	mathfunc_t** funcs = malloc(funcsCount*sizeof(void*));
-	for (int i=0;i < funcsCount;i++){
+	mathfunc_t** funcs = malloc(mathfunc_count*sizeof(void*));
+	for (int i=0;i < mathfunc_count;i++){
 		funcs[i] = malloc(sizeof(mathfunc_t));
-		funcs[i]->id=i;
+		funcs[i]->id=MATHFUNC_ID_START+i;
 		funcs[i]->nargs=1;
 	}
 
@@ -36,13 +37,13 @@ mathfunc_t** getMathFuncs(){
 
 
 Node* constructFuncNameTrie(mathfunc_t** funcs){
-	Node* root = constructTrie(funcsCount,mathfunc_names);	
+	Node* root = constructTrie(mathfunc_count,mathfunc_names);	
 
-	linkObjectsToTrieNodes(root,mathfunc_names,funcs,funcsCount);
+	linkObjectsToTrieNodes(root,mathfunc_names,(void**)funcs,mathfunc_count);
 	return root;
 }
 
-void* deleteFuncsFromHeap(mathfunc_t** funcs){
+void deleteFuncsFromHeap(mathfunc_t** funcs){
 	int n = sizeof(funcs);
 
 	for (int i=0;i < n;i++)
