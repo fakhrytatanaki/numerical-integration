@@ -17,7 +17,7 @@ int main(int argc,char** argv){
 	out[0]=0;
 	
 	const char* testvars[] = {"x","y","john"};
-	Node* varTrie = constructTrie(3,testvars);
+	Node* varTrie = constructVarTrie(3,testvars);
 	mathfunc_t** funcs = getMathFuncs();
 	Node* funcTrie = constructFuncNameTrie(funcs);
 
@@ -35,6 +35,8 @@ void charcat(char* str,char c){ //concatenates a character to a string
 	strcat(str,tmp);
 }
 
+
+
 int precedence(char a){ // evaluates the precedence of the operator
 	switch(a){
 		case '+':
@@ -45,10 +47,10 @@ int precedence(char a){ // evaluates the precedence of the operator
 			return 2;
 
 		default:
-			if (a >= MATHFUNC_ID_START && a < MATHFUNC_ID_START + mathfunc_count)
+			if (-a >= MATHFUNC_ID_START && -a < MATHFUNC_ID_START + mathfunc_count)
 				return 3;
 
-			return -1; // -1 is returned as precedence if the character is not a operator or a function
+			return -1; // -1 is returned as precedence if the character is not a operator or a function ID
 
 	}
 }
@@ -57,8 +59,8 @@ int precedence(char a){ // evaluates the precedence of the operator
 void printPostfix(const char* out){
 	int i=0;
 	while (out[i]!=0){
-		if (out[i] >= MATHFUNC_ID_START && out[i] < MATHFUNC_ID_START + mathfunc_count)
-			printf("%s",mathfunc_names[out[i] - MATHFUNC_ID_START]);
+		if (-out[i] >= MATHFUNC_ID_START && -out[i] < MATHFUNC_ID_START + mathfunc_count)
+			printf("%s",mathfunc_names[-out[i] - MATHFUNC_ID_START]);
 		
 		else
 			printf("%c",out[i]);
@@ -66,6 +68,11 @@ void printPostfix(const char* out){
 	}
 	printf("\n");
 }
+
+
+//double evaluatePostfix(const char** str){
+	//
+//}
 
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // converts infix (strIn) to postfix notation (strOut)
  //an implementation of the shunting-yard algorithm
@@ -93,19 +100,14 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 	int p1,p2; // for storing the precedence of 2 operators to be compared
 	
 	for (int i=0;i < n;i++){  
-		
+
+		if (c1==' ') // ignore spaces
+			continue;
+
 		printf("%c,i:%d\n",c1,i);
 		c1 = strIn[i];
 
-		if (c1==' ')
-			continue; 
 
-		else if (c1==','){
-			pointFlag=0;
-			decimalFlag=0;
-			continue;
-
-		}
 		printVector(&s,AS_INT);
 
 		if (c1 >= '0' && c1 <='9'){
@@ -135,12 +137,16 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		else {
 
+
 			if (decimalFlag)
 				charcat(strOut,']'); //the closed square bracket denotes the ending of a decimal
 
 			//flags for point and decimal are reset	
 			decimalFlag=0;
 			pointFlag=0;
+			
+			if (c1==',') 
+				continue; 
 			
 			
 			if (c1=='(')
@@ -172,7 +178,6 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 				while (i < n ){
 
-					c1 = strIn[i++];
 
 					if (precedence(c1)!=-1 || c1==' ' || c1=='(' || c1==')')
 						break;
@@ -180,8 +185,13 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					printf("%c\n",c1);
 					charcat(tmpString,c1);
 
+					c1 = strIn[++i];
+
 				}
 				i--;
+				
+
+				
 
 				Node* foundObj;	
 				int funcIsFound = strSearch(tmpString,funcTrie,&foundObj);
@@ -200,7 +210,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 				}
 
 				else {
-					c1 = ((mathfunc_t*)foundObj->obj)->id;
+					c1 = -((mathfunc_t*)foundObj->obj)->id;
 					tmpString[0]=0;
 				}
 
@@ -238,9 +248,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 	}
 	
 
-		printf("end,count : %d\n",s.count);
 	while (s.count){
-		printf("end\n");
 		charcat(strOut,vectorPop(&s));
 		printVector(&s,AS_INT);
 	}
