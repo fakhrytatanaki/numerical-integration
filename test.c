@@ -1,23 +1,20 @@
-#include "mathfuncs.h"
 #include <stdio.h>
-#include "treenode.h"
-#include "strsearch.h"
-#include "vector.h"
+
+#define sumMAC(a) int arr[] tmp = (a); \sum(tmp)
+
+int testFunc(int* arr,int s){
+	int sum=0;
+	
+	for (int i=0;i < s;i++)
+		sum+=arr[i];
+
+	return sum;
+
+}
 
 int main(){
-	mathfunc_t** funcs = getMathFuncs();
-	Node* n = constructFuncNameTrie(funcs);
-	Node* found;
-	int f;
-
-	
-
-	for (int i=0;i<mathFuncsCount;i++){
-		f = strSearch(mathfunc_names[i],n,&found);
-		printf("val : %d\n",((mathfunc_t*) (found->obj))->id );
-	}
-	
-	deleteFuncsFromHeap(funcs);	
-
+	int arr[] = {1,2,3,4};
+	int res = testFunc(arr,4);
+	printf("%d\n",res);
 	return 0;
 }

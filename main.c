@@ -61,6 +61,7 @@ void printPostfix(const char* out){
 	while (out[i]!=0){
 		if (-out[i] >= MATHFUNC_ID_START && -out[i] < MATHFUNC_ID_START + mathfunc_count)
 			printf("%s",mathfunc_names[-out[i] - MATHFUNC_ID_START]);
+		else if ("")
 		
 		else
 			printf("%c",out[i]);
@@ -101,12 +102,18 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 	
 	for (int i=0;i < n;i++){  
 
+
+		c1 = strIn[i];
+
+		printf("%c,i:%d\n",c1,i);
+
 		if (c1==' ') // ignore spaces
 			continue;
 
-		printf("%c,i:%d\n",c1,i);
-		c1 = strIn[i];
-
+		else if (c1=='$'){
+			printf("sorry, the symbol '$' is reserved\n");
+			exit(-1);
+		}
 
 		printVector(&s,AS_INT);
 
@@ -149,10 +156,12 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 				continue; 
 			
 			
-			if (c1=='(')
+			if (c1=='(') //push an opening parenthesis to the stack;
 				vectorPush(&s,c1);
 
-			else if (c1==')'){
+			else if (c1==')'){ 
+				// when the closing parenthesis is spotted, pop stack elements to output 
+				// until the opening parenthesis is found;
 				printf("CPARFIND %d\n",i);
 
 
@@ -174,13 +183,15 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 			}
 
 			else if (precedence(c1)==-1){
+				//the character could possibly be the start of a variable/function name
 			
 
-				while (i < n ){
-
+				while (i < n ){ 
+					//copy the name of a possible function or variable into
+					//a temporary string
 
 					if (precedence(c1)!=-1 || c1==' ' || c1=='(' || c1==')')
-						break;
+						break; //the following symbols indicate the end of the name
 					
 					printf("%c\n",c1);
 					charcat(tmpString,c1);
@@ -188,35 +199,45 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					c1 = strIn[++i];
 
 				}
-				i--;
+				i--; //take one step back in the input string
 				
 
 				
 
-				Node* foundObj;	
+				Node* foundObj;	 
+				//search for the name of the function or variable in the prefix trees
 				int funcIsFound = strSearch(tmpString,funcTrie,&foundObj);
 				int varIsFound = strSearch(tmpString,varTrie,&foundObj);
 
 				if (!funcIsFound && !varIsFound){
 
+					//abort program if no variable or function is found;
 					printf("ERROR : unknown variable or function name \'%s\'\n",tmpString);
 					exit(-1);
 
 				}
+
+					//the ID of a function/variable will be given as a negative char value
+					//so the IDs don't overlap with the standard ASCII table
+					
 				else if (varIsFound){
-					strcat(strOut,tmpString);
+					//when a variable is found
+					
+					charcat(strOut,'$'); //variables are denoted by a dollar sign prefix
+					charcat(strOut,-(foundObj->key + VAR_ID_START)); //add the -ve of the ID of a variable to the output
 					tmpString[0]=0;
 					continue;
 				}
 
 				else {
+					//when a function is found
 					c1 = -((mathfunc_t*)foundObj->obj)->id;
 					tmpString[0]=0;
 				}
 
 			}
 
-			p1 = precedence(c1);
+			p1 = precedence(c1); //get the precedence of the operator/function
 			
 			if (s.count==0 && p1!=-1){ //if stack is empty and you have an operator in your hand, push it to stack
 				vectorPush(&s,c1);

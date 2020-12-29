@@ -7,6 +7,7 @@
 
 typedef struct _treenode{
 	int value;
+	int key;
 	void* obj;
 	int max;
 	int count;
