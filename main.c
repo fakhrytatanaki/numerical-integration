@@ -5,14 +5,16 @@
 #include "strsearch.h"
 #include "mathfuncs.h"
 #define ui8 unsigned char
-
-
 void charcat(char* str,char c);
 int precedence(char a);
 void printPostfix(const char* out);
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie);
+double parseStringToDouble(const char* string);
 
 int main(int argc,char** argv){
+	
+
+
 	char out[128];			
 	out[0]=0;
 	
@@ -23,6 +25,7 @@ int main(int argc,char** argv){
 
 	toPostFix(argv[1],out,128,funcTrie,varTrie);
 	printPostfix(out);
+	
 	
 	return 0;
 }
@@ -61,8 +64,7 @@ void printPostfix(const char* out){
 	while (out[i]!=0){
 		if (-out[i] >= MATHFUNC_ID_START && -out[i] < MATHFUNC_ID_START + mathfunc_count)
 			printf("%s",mathfunc_names[-out[i] - MATHFUNC_ID_START]);
-		else if ("")
-		
+	
 		else
 			printf("%c",out[i]);
 		i++;
@@ -70,10 +72,86 @@ void printPostfix(const char* out){
 	printf("\n");
 }
 
+double rmul_pow(double x,int y){
+	double res=1;
+	while (y < 0){
+		res=res/x;
+		y++;
+	}
 
-double evaluatePostfix(const char** str){
+	while (y > 0){
+		res=res*x;
+		y--;
+	}
+
+	return res;
+};
+
+
+double parseStringToDouble(const char* string){
+	int n = strlen(string);
+	int order;
+	int sign= (string[0]=='-')? -1:1;
+
+	ui8 isNegative = sign==-1;
+	ui8 pointFound = 0;
+	double res = 0;
+	
+	for (int i=0 + isNegative;i < n;i++){
+
+		if (string[i] == '.'){
+			order=i-isNegative-1;
+			pointFound = 1;
+			break;
+		}
+
+		if (!(string[i] >= '0' && string[i] <= '9')){
+			printf("DOUBLE PARSE ERROR : \'%c\' is not a decimal ",string[i]);
+			exit(-1);
+		}
+		
+	
+
+	} 
+
+	if (!pointFound)
+		order = n-1-isNegative;
+	
+	for (int i=0+isNegative;i < n;i++){
+
+		if (string[i] == '.'){
+			continue;
+		}
+		res+=(string[i]-'0')*rmul_pow(10,order--);
+
+	}
+
+	return sign*res;
 	
 }
+
+//full_func_t constructFunction(const char* postfix_str,int vc){
+//
+//		int n = strlen(postfix_str);
+//		char c;
+//		double lval,rval;
+//
+//		full_func_t f= {
+//			.varlist = (double*) malloc(vc*sizeof(double)),
+//			.varc = vc,
+//			.seq = (atex*) malloc(sizeof(atex)*n),
+//			.seqc = 0
+//		}; 
+//
+//		Vector s = initVector(n);
+//
+//		for (int i=0;i < n;i++){
+//
+//			c = postfix_str[i];
+//		
+//
+//		}
+//}
 
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // converts infix (strIn) to postfix notation (strOut)
  //an implementation of the shunting-yard algorithm
@@ -269,7 +347,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 	}
 	
 
-	while (s.count){
+	while (s.count){ //pop what is remaining in the stack to the output
 		charcat(strOut,vectorPop(&s));
 		printVector(&s,AS_INT);
 	}

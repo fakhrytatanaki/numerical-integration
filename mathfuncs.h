@@ -67,6 +67,9 @@ Node* constructVarTrie(int strc,const char** strv){
 	return varTrie;
 }
 
+
+
+
 #endif 
 
 
