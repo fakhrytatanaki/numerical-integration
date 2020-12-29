@@ -71,9 +71,9 @@ void printPostfix(const char* out){
 }
 
 
-//double evaluatePostfix(const char** str){
-	//
-//}
+double evaluatePostfix(const char** str){
+	
+}
 
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // converts infix (strIn) to postfix notation (strOut)
  //an implementation of the shunting-yard algorithm
@@ -224,7 +224,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					//when a variable is found
 					
 					charcat(strOut,'$'); //variables are denoted by a dollar sign prefix
-					charcat(strOut,-(foundObj->key + VAR_ID_START)); //add the -ve of the ID of a variable to the output
+					charcat(strOut,-foundObj->key); //add the -ve of the ID of a variable to the output
 					tmpString[0]=0;
 					continue;
 				}
