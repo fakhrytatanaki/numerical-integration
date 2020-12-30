@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "vector.h"
+#include "dvector.h"
 #include "strsearch.h"
 #include "mathfuncs.h"
 #define ui8 unsigned char
@@ -10,6 +11,9 @@ int precedence(char a);
 void printPostfix(const char* out);
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie);
 double parseStringToDouble(const char* string);
+double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs);
+double rmul_pow(double x,int y);
+psarr_t parsePSString(const char* str);
 
 int main(int argc,char** argv){
 	
@@ -21,10 +25,13 @@ int main(int argc,char** argv){
 	const char* testvars[] = {"x","y","john"};
 	Node* varTrie = constructVarTrie(3,testvars);
 	mathfunc_t** funcs = getMathFuncs();
+	
 	Node* funcTrie = constructFuncNameTrie(funcs);
-
 	toPostFix(argv[1],out,128,funcTrie,varTrie);
-	printPostfix(out);
+	psarr_t test = parsePSString(out);
+	double final = evaluateFunction(test,NULL,NULL);
+	//printPostfix(out);
+	printf("RESULT : %lf\n",final);	
 	
 	
 	return 0;
@@ -130,28 +137,91 @@ double parseStringToDouble(const char* string){
 	
 }
 
-//full_func_t constructFunction(const char* postfix_str,int vc){
-//
-//		int n = strlen(postfix_str);
-//		char c;
-//		double lval,rval;
-//
-//		full_func_t f= {
-//			.varlist = (double*) malloc(vc*sizeof(double)),
-//			.varc = vc,
-//			.seq = (atex*) malloc(sizeof(atex)*n),
-//			.seqc = 0
-//		}; 
-//
-//		Vector s = initVector(n);
-//
-//		for (int i=0;i < n;i++){
-//
-//			c = postfix_str[i];
-//		
-//
-//		}
-//}
+psarr_t parsePSString(const char* str){
+
+	int n = strlen(str);
+
+	psarr_t s = {
+		.size=n,
+		.count=0,
+		.data  = malloc(n*sizeof(expobj_t))
+	};
+
+	char tmp[n];
+	tmp[0]=0;
+
+	for (int i=0;i < n;i++){
+		
+		if (str[i]=='['){
+
+			i++;
+			while (str[i]!=']' && i < n)
+				charcat(tmp,str[i++]);
+
+			s.data[s.count].type =  MATHFUNCS_OBJ_VAL;
+			s.data[s.count].val =  parseStringToDouble(tmp);
+			tmp[0]=0;
+			s.count++;
+			
+		}
+
+
+		else if (str[i]=='$'){
+			s.data[s.count].type = MATHFUNCS_OBJ_VAR;
+			s.data[s.count++].key = -str[++i];
+		}
+
+		else if (str[i] > 0) {
+			s.data[s.count].type =	MATHFUNCS_OBJ_PRI;
+			s.data[s.count++].key = str[i];
+		}
+
+		else {
+
+			s.data[s.count].type =	MATHFUNCS_OBJ_FUNC;
+			s.data[s.count++].key = -str[i];
+		}
+
+	}
+
+	return s;
+
+	
+}
+
+double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
+	DVector values = initDVector(in.count);
+	expobj_t* arr = in.data;
+	double lval,rval;
+
+	for (int i=0;i < in.count;i++){
+		if (arr[i].type==MATHFUNCS_OBJ_VAL)
+			dVectorPush(&values,arr[i].val);
+
+		else if (arr[i].type==MATHFUNCS_OBJ_PRI){
+			rval = dVectorPop(&values);
+			lval = (values.count)? dVectorPop(&values) : 0;
+
+			switch(arr[i].key){
+				case '+':
+					dVectorPush(&values,lval + rval);
+					break;
+				case '-':
+					dVectorPush(&values,lval - rval);
+					break;
+				case '*':
+					dVectorPush(&values,lval*rval);
+					break;
+				case '/':
+					dVectorPush(&values,lval/rval);
+					break;
+
+			}
+		}
+	}
+
+	return dVectorPop(&values);
+}
 
 void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // converts infix (strIn) to postfix notation (strOut)
  //an implementation of the shunting-yard algorithm
@@ -183,7 +253,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		c1 = strIn[i];
 
-		printf("%c,i:%d\n",c1,i);
+		//printf("%c,i:%d\n",c1,i);
 
 		if (c1==' ') // ignore spaces
 			continue;
@@ -193,7 +263,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 			exit(-1);
 		}
 
-		printVector(&s,AS_INT);
+		//printVector(&s,AS_INT);
 
 		if (c1 >= '0' && c1 <='9'){
 			
@@ -240,13 +310,13 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 			else if (c1==')'){ 
 				// when the closing parenthesis is spotted, pop stack elements to output 
 				// until the opening parenthesis is found;
-				printf("CPARFIND %d\n",i);
+				//printf("CPARFIND %d\n",i);
 
 
 				while (1){
 
-					printf("CPAR %d\n",i);
-					printVector(&s,AS_INT);
+					//printf("CPAR %d\n",i);
+					//printVector(&s,AS_INT);
 
 					if (!s.count)
 						break;
@@ -271,7 +341,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					if (precedence(c1)!=-1 || c1==' ' || c1=='(' || c1==')')
 						break; //the following symbols indicate the end of the name
 					
-					printf("%c\n",c1);
+					//printf("%c\n",c1);
 					charcat(tmpString,c1);
 
 					c1 = strIn[++i];
@@ -323,7 +393,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 			else if (s.count && p1!=-1){ 
 
-				printf("CPRECCOMP\n");
+				//printf("CPRECCOMP\n");
 				c2 = vectorPop(&s); //pop a second operator off the stack
 				p2 = precedence(c2); // then get its precedence
 				
@@ -349,7 +419,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 	while (s.count){ //pop what is remaining in the stack to the output
 		charcat(strOut,vectorPop(&s));
-		printVector(&s,AS_INT);
+		//printVector(&s,AS_INT);
 	}
 
 }

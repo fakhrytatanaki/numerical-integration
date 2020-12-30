@@ -1,5 +1,10 @@
 #ifndef MATHFUNCS_STRUCT_H
 #define MATHFUNCS_STRUCT_H
+#define MATHFUNCS_OBJ_VAL 0
+#define MATHFUNCS_OBJ_VAR 1
+#define MATHFUNCS_OBJ_PRI 2
+#define MATHFUNCS_OBJ_FUNC 3
+
 struct _mathfunc_t{
 	int id;
 	int nargs;
@@ -7,20 +12,18 @@ struct _mathfunc_t{
 	 double (*func2a)(double,double);
 };
 
-struct atomic_expression{
-	double lval,rval;
-	struct _mathfunc_t* func;
-};
-
-struct full_function{
-	double* varlist;
-	int varc;
-	struct atomic_expression* seq;
-	int seqc;
-}; 
 
 typedef struct _mathfunc_t mathfunc_t;
-typedef struct atomic_expression atex;
-typedef struct full_function full_func_t;
 
+typedef struct {
+	int type;
+	int key;
+	double val;
+} expobj_t;
+
+typedef struct {
+	int size;
+	int count;
+	expobj_t* data;
+} psarr_t;
 #endif
