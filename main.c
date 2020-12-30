@@ -30,7 +30,7 @@ int main(int argc,char** argv){
 	toPostFix(argv[1],out,128,funcTrie,varTrie);
 	psarr_t test = parsePSString(out);
 	double final = evaluateFunction(test,NULL,NULL);
-	//printPostfix(out);
+	printPostfix(out);
 	printf("RESULT : %lf\n",final);	
 	
 	
@@ -243,7 +243,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 	}	
 	ui8 decimalFlag=0; //flag for indicating the presence of a decimal number
 	ui8 pointFlag=0;
-
+	ui8 prevNumFlag=0;
 
 	char c1,c2;
 	int p1,p2; // for storing the precedence of 2 operators to be compared
@@ -292,9 +292,14 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		else {
 
+			if (prevNumFlag)
+				prevNumFlag=0;
 
-			if (decimalFlag)
-				charcat(strOut,']'); //the closed square bracket denotes the ending of a decimal
+			
+			if (decimalFlag){
+				charcat(strOut,']'); 
+				prevNumFlag = 1;
+				}//the closed square bracket denotes the ending of a decimal
 
 			//flags for point and decimal are reset	
 			decimalFlag=0;
@@ -386,7 +391,12 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 			}
 
 			p1 = precedence(c1); //get the precedence of the operator/function
-			
+
+			// if (prevNumFlag && c1=='-')
+			// 	p1=3;
+
+		
+
 			if (s.count==0 && p1!=-1){ //if stack is empty and you have an operator in your hand, push it to stack
 				vectorPush(&s,c1);
 				  }
@@ -405,6 +415,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 				}
 
 				else{
+					
 					// if op1 equal or smaller in precedence
 					charcat(strOut,c2); //append op2 to output string
 					vectorPush(&s,c1); //push op1 to stack
