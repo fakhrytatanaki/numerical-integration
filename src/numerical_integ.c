@@ -1,6 +1,4 @@
-#ifndef NUMERICAL_INTEG_H
-#define NUMERICAL_INTEG_H
-	
+#include "numerical_integ.h"	
 
 double trapez_integ(int a,int b,double h,double (*func)(double)){
 	double diff = b - a;
@@ -53,4 +51,3 @@ double simpson_three_eighth(int a,int b,double h,double (*func)(double)){
 	return res;
 }
 
-#endif

@@ -1,10 +1,5 @@
 
-
-#ifndef STRSEARCH_H
-#define STRSEARCH_H
-#include <stdio.h>
-#include <string.h>
-#include "treenode.h"
+#include "strsearch.h"
 
 Node* constructTrie(int strc,const char** strv){
 
@@ -102,4 +97,3 @@ void linkObjectsToTrieNodes(Node* root,const char** stringMap,void** objMap,int 
 }
 
 
-#endif

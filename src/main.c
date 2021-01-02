@@ -5,6 +5,7 @@
 #include "dvector.h"
 #include "strsearch.h"
 #include "mathfuncs.h"
+
 #define ui8 unsigned char
 void charcat(char* str,char c);
 int precedence(char a);

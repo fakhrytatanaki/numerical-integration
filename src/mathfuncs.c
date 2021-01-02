@@ -1,12 +1,4 @@
-#pragma once
-
-#ifndef MATHFUNCS_H
-#define MATHFUNCS_H
-#include "strsearch.h"
-#include <math.h>
-#include "mathfuncs_struct.h"
-#define MATHFUNC_ID_START 16
-#define VAR_ID_START 3; 
+#include "mathfuncs.h"
 
 const char* mathfunc_names[] = {"pow","exp","ln","sin","cos","sinh","cosh","asin","acos","asinh","acosh"};
 const int mathfunc_count = sizeof(mathfunc_names)/sizeof(mathfunc_names[0]);
@@ -68,8 +60,5 @@ Node* constructVarTrie(int strc,const char** strv){
 }
 
 
-
-
-#endif 
 
 

@@ -1,18 +1,5 @@
-#include <stdlib.h>
-#include <assert.h>
-#include <stdio.h>
+#include "treenode.h"
 
-#ifndef TREENODE_H
-#define TREENODE_H
-
-typedef struct _treenode{
-	int value;
-	int key;
-	void* obj;
-	int max;
-	int count;
-	struct _treenode** next;	
-} Node;
 
 Node* newRoot(int n){
 
@@ -74,4 +61,3 @@ int findNextVal(int k,Node* node,Node** found){
 	}
 	return -1;
 }
-#endif
