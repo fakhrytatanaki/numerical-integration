@@ -31,7 +31,7 @@ int main(int argc,char** argv){
 	toPostFix(argv[1],out,128,funcTrie,varTrie);
 	printPostfix(out);
 	psarr_t test = parsePSString(out);
-	double final = evaluateFunction(test,NULL,NULL);
+	double final = evaluateFunction(test,NULL,funcs);
 	printf("RESULT : %lf\n",final);	
 	
 	
@@ -61,7 +61,7 @@ int precedence(char a){ // evaluates the precedence of the operator
 
 		default:
 			if (-a >= MATHFUNC_ID_START && -a < MATHFUNC_ID_START + mathfunc_count)
-				return 3;
+				return 4;
 
 			return -1; // -1 is returned as precedence if the character is not a operator or a function ID
 
@@ -196,8 +196,10 @@ double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
 	DVector values = initDVector(in.count);
 	expobj_t* arr = in.data;
 	double lval,rval;
+	int fInd;
 
 	for (int i=0;i < in.count;i++){
+		printf(" expression object : type : %d, key : %d, value:%f\n",arr[i].type,arr[i].key,arr[i].val);
 		if (arr[i].type==MATHFUNCS_OBJ_VAL)
 			dVectorPush(&values,arr[i].val);
 
@@ -232,6 +234,26 @@ double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
 					break;
 
 				printf("lval : %lf,rval:%lf\n",lval,rval);
+			}
+
+		}
+		else if (arr[i].type==MATHFUNCS_OBJ_FUNC){
+
+			printf(" FUNCTION FOUND : type : %d, key : %d, value:%f\n",arr[i].type,arr[i].key,arr[i].val);
+			fInd= arr[i].key - MATHFUNC_ID_START;
+
+			if (funcs[fInd]->nargs==1){
+				
+				rval =  dVectorPop(&values);
+				dVectorPush(&values,funcs[fInd]->func1a(rval));
+				
+			}
+
+			else {
+
+				rval =  dVectorPop(&values);
+				lval =  dVectorPop(&values);
+				dVectorPush(&values,funcs[fInd]->func2a(lval,rval));
 			}
 		}
 	}
@@ -269,7 +291,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		c1 = strIn[i];
 
-		printf("cc:%c,i:%d,pnf:%lu\n",c1,i,prevNumFlag);
+		printf("cc:%c,i:%d,pnf:%hhu\n",c1,i,prevNumFlag);
 
 		if (c1==' ') // ignore spaces
 			continue;
