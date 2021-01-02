@@ -28,9 +28,9 @@ int main(int argc,char** argv){
 	
 	Node* funcTrie = constructFuncNameTrie(funcs);
 	toPostFix(argv[1],out,128,funcTrie,varTrie);
+	printPostfix(out);
 	psarr_t test = parsePSString(out);
 	double final = evaluateFunction(test,NULL,NULL);
-	printPostfix(out);
 	printf("RESULT : %lf\n",final);	
 	
 	
@@ -55,6 +55,8 @@ int precedence(char a){ // evaluates the precedence of the operator
 		case '*':
 		case '/':
 			return 2;
+		case '~':
+			return 3;
 
 		default:
 			if (-a >= MATHFUNC_ID_START && -a < MATHFUNC_ID_START + mathfunc_count)
@@ -199,23 +201,36 @@ double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
 			dVectorPush(&values,arr[i].val);
 
 		else if (arr[i].type==MATHFUNCS_OBJ_PRI){
-			rval = dVectorPop(&values);
-			lval = (values.count)? dVectorPop(&values) : 0;
 
 			switch(arr[i].key){
+				case '~':
+					rval = dVectorPop(&values);
+					dVectorPush(&values,-rval);
+					break;
+
+
 				case '+':
+					rval =  dVectorPop(&values);
+					lval =  dVectorPop(&values);
 					dVectorPush(&values,lval + rval);
 					break;
 				case '-':
+					rval =  dVectorPop(&values);
+					lval =  dVectorPop(&values);
 					dVectorPush(&values,lval - rval);
 					break;
 				case '*':
+					rval =  dVectorPop(&values);
+					lval =  dVectorPop(&values);
 					dVectorPush(&values,lval*rval);
 					break;
 				case '/':
+					rval =  dVectorPop(&values);
+					lval =  dVectorPop(&values);
 					dVectorPush(&values,lval/rval);
 					break;
 
+				printf("lval : %lf,rval:%lf\n",lval,rval);
 			}
 		}
 	}
@@ -253,13 +268,13 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		c1 = strIn[i];
 
-		//printf("%c,i:%d\n",c1,i);
+		printf("cc:%c,i:%d,pnf:%lu\n",c1,i,prevNumFlag);
 
 		if (c1==' ') // ignore spaces
 			continue;
 
-		else if (c1=='$'){
-			printf("sorry, the symbol '$' is reserved\n");
+		else if (c1=='$' || c1=='~'){
+			printf("sorry, the symbol '%c' is reserved\n",c1);
 			exit(-1);
 		}
 
@@ -390,10 +405,11 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 			}
 
+			if (!prevNumFlag && c1=='-')
+			 	c1='~';
+			 
 			p1 = precedence(c1); //get the precedence of the operator/function
 
-			// if (prevNumFlag && c1=='-')
-			// 	p1=3;
 
 		
 

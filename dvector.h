@@ -33,7 +33,7 @@ void deleteDVector(DVector* v){
 
 void dVectorPush(DVector* v,double val){
 	
-	//printf("to be pushed : %lf\n",val);
+	printf("to be pushed : %lf\n",val);
 	if (v->count==v->maxSize){
 		printf("ERROR : DVector is full");
 		exit(-1);
@@ -45,7 +45,7 @@ void dVectorPush(DVector* v,double val){
 
 double dVectorPop(DVector* v){
 
-	//printf("to be popped : %lf\n",v->data[v->count-1]);
+	printf("to be popped : %lf\n",v->data[v->count-1]);
 	if (!v->count){
 		printf("ERROR : DVector is empty");
 		exit(-1);
