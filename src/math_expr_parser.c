@@ -162,7 +162,7 @@ double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
 	int fInd;
 
 	for (int i=0;i < in.count;i++){
-		printf(" expression object : type : %d, key : %d, value:%f\n",arr[i].type,arr[i].key,arr[i].val);
+		//printf(" expression object : type : %d, key : %d, value:%f\n",arr[i].type,arr[i].key,arr[i].val);
 		if (arr[i].type==MATHFUNCS_OBJ_VAL)
 			dVectorPush(&values,arr[i].val);
 
@@ -196,13 +196,13 @@ double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
 					dVectorPush(&values,lval/rval);
 					break;
 
-				printf("lval : %lf,rval:%lf\n",lval,rval);
+				//printf("lval : %lf,rval:%lf\n",lval,rval);
 			}
 
 		}
 		else if (arr[i].type==MATHFUNCS_OBJ_FUNC){
 
-			printf(" FUNCTION FOUND : type : %d, key : %d, value:%f\n",arr[i].type,arr[i].key,arr[i].val);
+			//printf(" FUNCTION FOUND : type : %d, key : %d, value:%f\n",arr[i].type,arr[i].key,arr[i].val);
 			fInd= arr[i].key - MATHFUNC_ID_START;
 
 			if (funcs[fInd]->nargs==1){
@@ -219,6 +219,11 @@ double evaluateFunction(psarr_t in,double* i_arr,mathfunc_t** funcs){
 				dVectorPush(&values,funcs[fInd]->func2a(lval,rval));
 			}
 		}
+		else if (arr[i].type==MATHFUNCS_OBJ_VAR)
+			dVectorPush(&values,i_arr[ arr[i].key - VAR_ID_START ]);
+			
+		
+
 	}
 
 	return dVectorPop(&values);
@@ -254,7 +259,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		c1 = strIn[i];
 
-		printf("cc:%c,i:%d,pnf:%hhu\n",c1,i,prevNumFlag);
+		//printf("cc:%c,i:%d,pnf:%hhu\n",c1,i,prevNumFlag);
 
 		if (c1==' ') // ignore spaces
 			continue;

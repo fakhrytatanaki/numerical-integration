@@ -6,7 +6,7 @@
 #include <math.h>
 #include "mathfuncs_struct.h"
 #define MATHFUNC_ID_START 16
-#define VAR_ID_START 3; 
+#define VAR_ID_START 3
 
 extern const char* mathfunc_names[]; 
 extern const int mathfunc_count;
