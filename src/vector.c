@@ -23,7 +23,7 @@ void deleteVector(Vector* v){
 
 void vectorPush(Vector* v,int val){
 	
-	printf("to be pushed : %c : %d\n",val,val);
+	//printf("to be pushed : %c : %d\n",val,val);
 	if (v->count==v->maxSize){
 		//printf("ERROR : Vector is full");
 		exit(-1);
@@ -35,7 +35,7 @@ void vectorPush(Vector* v,int val){
 
 int vectorPop(Vector* v){
 
-	printf("to be popped : %c : %d\n",v->data[v->count-1],v->data[v->count-1]);
+	//printf("to be popped : %c : %d\n",v->data[v->count-1],v->data[v->count-1]);
 	if (!v->count){
 		//printf("ERROR : Vector is empty");
 		exit(-1);

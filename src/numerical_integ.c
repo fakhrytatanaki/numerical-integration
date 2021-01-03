@@ -1,8 +1,21 @@
 #include "numerical_integ.h"	
 
-double trapez_integ(int a,int b,double h,double (*func)(double)){
+double riemann_integ(int a,int b,int n,double (*func)(double)){
 	double diff = b - a;
-	int n = diff/h;
+	double h = diff/n;
+
+	double res=0;
+
+	for (int i=0;i < n;i++)
+		res+=func(a+h*i)*h;
+	
+	return res;
+	
+}
+
+double trapez_integ(int a,int b,int n,double (*func)(double)){
+	double diff = b - a;
+	double h = diff/n;
 
 	double res;
 	double sum = 0;
@@ -14,10 +27,10 @@ double trapez_integ(int a,int b,double h,double (*func)(double)){
 	return res;
 }
 
-double simpson_third(int a,int b,double h,double (*func)(double)){
+double simpson_third(int a,int b,int n,double (*func)(double)){
 
 	double diff = b - a;
-	int n = diff/h;
+	double h = diff/n;
 
 	double res;
 	double sum=0;
@@ -33,10 +46,10 @@ double simpson_third(int a,int b,double h,double (*func)(double)){
 	return res;
 }
 
-double simpson_three_eighth(int a,int b,double h,double (*func)(double)){
+double simpson_three_eighth(int a,int b,int n,double (*func)(double)){
 
 	double diff = b - a;
-	int n = diff/h;
+	double h = diff/n;
 
 	double res;
 	double sum=0;
