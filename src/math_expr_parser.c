@@ -349,7 +349,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					//copy the name of a possible function or variable into
 					//a temporary string
 
-					if (precedence(c1)!=-1 || c1==' ' || c1=='(' || c1==')')
+					if (precedence(c1)!=-1 || c1==' ' || c1==',' || c1=='(' || c1==')')
 						break; //the following symbols indicate the end of the name
 					
 					//printf("%c\n",c1);
