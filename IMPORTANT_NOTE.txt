@@ -1,0 +1,18 @@
+NUMERICAL INTEGRATIOM CALCULATOR
+
+due to issues with the implementation of math parser, some expressions involving
+minus operators give incorrect results, the issue is fixed by writing negative values
+between parenthesis, for example
+
+a - b should be rewritten as a + (-b)
+-a - x*b - y should be rewritten as (-a) + (-x)*b + (-y)
+
+all .c files in the src folder should be compiled as done in the makefile
+
+the files can be compiled by using the make command in Linux and macos, (windows require cygwin or WSL to use the make and gcc command)
+required tools (gcc for compiling c code)
+
+alternatively, any IDE that supports c or c++ can be used, providing that all files are compiled
+
+
+Best Regards, Fakhry

@@ -1,14 +1,17 @@
 #include "math_expr_parser.h"
 #include "numerical_integ.h"
+//Numerical Integration
+//Fakhry Hussein Tatanaki 100-1271 T0-2
 
-psarr_t inputExp;
-mathfunc_t** funcs;
-const char* testvars[] = {"x"};
-Node* varTrie;
-Node* funcTrie; 
+psarr_t inputExp; //struct for postfix expression objects
+mathfunc_t** funcs; //struct for math functions
+const char* testvars[] = {"x"}; //the name of the variable, only one is needed for the integration
+Node* varTrie; //tree data structure for searching variable names in the parsing process
+Node* funcTrie; //prefix tree data structure fot searching mathfunction names in the parsing process
 
-double toBeIntegrated(double input){
-	return evaluateFunction(inputExp,&input,funcs);
+double toBeIntegrated(double input){ //a function that will be integrated
+	return evaluateFunction(inputExp,&input,funcs); //evaluateFunction evaluates a postfix object from a parsed expression
+	//you can remove the parser and put your own hardcoded math function in the place of evaluateFunction
 }
 
 int main(int argc,const char** argv){
@@ -19,19 +22,19 @@ int main(int argc,const char** argv){
 	funcTrie = constructFuncNameTrie(funcs);
 
 
-	double a,b;
-	int n;
-	double final;
-	char sel;
+	double a,b; //lower bound and upper bound respectively
+	int n; //number of subdivisions
+	double final; //result
+	char sel; //for selecting options
 
-	char in[128],out[128];			
-	out[0]=0;
+	char in[128],out[128];	//input string for expression and output postfix string	
+	out[0]=0; //clearing the string 
 
 	printf("please input an expression : ");
 	scanf("%s",in);
 	
 	toPostFix(in,out,128,funcTrie,varTrie);
-	inputExp = parsePSString(out);
+	inputExp = parsePSString(out); //parse postfix string into postfix expression objects
 
 	printf(" lower bound : ");
 	scanf("%lf",&a);

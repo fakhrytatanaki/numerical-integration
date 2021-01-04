@@ -1,8 +1,7 @@
 #include "mathfuncs.h"
 
-const char* mathfunc_names[] = {"pow","exp","ln","sin","cos","sinh","cosh","asin","acos","asinh","acosh"};
+const char* mathfunc_names[] = {"pow","exp","ln","sin","cos","sinh","cosh","asin","acos","asinh","acosh","tan","atan","tanh","atanh"};
 const int mathfunc_count = sizeof(mathfunc_names)/sizeof(mathfunc_names[0]);
-
 
 mathfunc_t** getMathFuncs(){
 	mathfunc_t** funcs = malloc(mathfunc_count*sizeof(void*));
@@ -12,7 +11,7 @@ mathfunc_t** getMathFuncs(){
 		funcs[i]->nargs=1;
 	}
 
-	(*funcs)->nargs=2;
+	funcs[0]->nargs=2;
 	funcs[0]->func2a = pow;
 	funcs[1]->func1a = exp;
 	funcs[2]->func1a = log;
@@ -24,6 +23,10 @@ mathfunc_t** getMathFuncs(){
 	funcs[8]->func1a = acos;
 	funcs[9]->func1a = asinh;
 	funcs[10]->func1a = acosh;
+	funcs[11]->func1a = tan;
+	funcs[12]->func1a = atan;
+	funcs[13]->func1a = tanh;
+	funcs[14]->func1a = atanh;
 	return funcs;
 }
 
