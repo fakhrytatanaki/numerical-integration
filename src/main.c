@@ -32,6 +32,7 @@ int main(int argc,const char** argv){
 
 	printf("please input an expression : ");
 	scanf("%s",in);
+	fflush(stdin); //clearing stdin
 	
 	toPostFix(in,out,128,funcTrie,varTrie);
 	inputExp = parsePSString(out); //parse postfix string into postfix expression objects
