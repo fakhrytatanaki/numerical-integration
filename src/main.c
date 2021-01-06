@@ -1,7 +1,6 @@
 #include "math_expr_parser.h"
 #include "numerical_integ.h"
-//Numerical Integration
-//Fakhry Hussein Tatanaki 100-1271 T0-2
+
 
 psarr_t inputExp; //struct for postfix expression objects
 mathfunc_t** funcs; //struct for math functions
