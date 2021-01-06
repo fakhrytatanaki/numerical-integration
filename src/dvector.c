@@ -6,7 +6,7 @@ DVector initDVector(int s){
 	DVector v = {
 		.maxSize = s,
 		.count = 0,
-		.data = malloc(s*sizeof(double))
+		.data =(double*) malloc(s*sizeof(double))
 	};
 
 	return v;

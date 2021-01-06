@@ -3,11 +3,11 @@
 
 Node* newRoot(int n){
 
-	Node* root = malloc(sizeof(Node));
+	Node* root =(Node*) malloc(sizeof(Node));
 	root->value=0;
 	root->max = n;
 	root->count = 0;
-	root->next = malloc(n*sizeof(void*));
+	root->next = (Node**) malloc(n*sizeof(void*));
 	return root;
 
 };

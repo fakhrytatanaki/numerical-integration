@@ -23,7 +23,7 @@ int main(int argc,const char** argv){
 
 
 	double a,b; //lower bound and upper bound respectively
-	int n; //number of subdivisions
+	int n; //number of sub-intervals
 	double final; //result
 	char sel; //for selecting options
 
@@ -31,9 +31,7 @@ int main(int argc,const char** argv){
 	out[0]=0; //clearing the string 
 
 	printf("please input an expression : ");
-	scanf("%s",in);
-	fflush(stdin); //clearing stdin
-	
+	fgets(in,512,stdin);	
 	toPostFix(in,out,128,funcTrie,varTrie);
 	inputExp = parsePSString(out); //parse postfix string into postfix expression objects
 
@@ -41,7 +39,7 @@ int main(int argc,const char** argv){
 	scanf("%lf",&a);
 	printf(" upper bound : ");
 	scanf("%lf",&b);
-	printf(" number of subdivisions : ");
+	printf(" number of sub-intervals: ");
 	scanf("%d",&n);
 	printf("select a method for numerical integration :\n\n");
 	

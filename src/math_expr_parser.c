@@ -110,7 +110,7 @@ psarr_t parsePSString(const char* str){
 	psarr_t s = {
 		.size=n,
 		.count=0,
-		.data  = malloc(n*sizeof(expobj_t))
+		.data  = (expobj_t*) malloc(n*sizeof(expobj_t))
 	};
 
 	char tmp[n];
@@ -261,7 +261,7 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 
 		//printf("cc:%c,i:%d,pnf:%hhu\n",c1,i,prevNumFlag);
 
-		if (c1==' ') // ignore spaces
+		if (c1==' ' || c1=='\n') // ignore spaces and newline characters
 			continue;
 
 		else if (c1=='$' || c1=='~'){
@@ -349,11 +349,12 @@ void toPostFix(char* strIn,char* strOut,int l,Node* funcTrie,Node* varTrie){ // 
 					//copy the name of a possible function or variable into
 					//a temporary string
 
-					if (precedence(c1)!=-1 || c1==' ' || c1==',' || c1=='(' || c1==')')
+					if (precedence(c1)!=-1 || c1==' ' || c1=='\n' || c1==',' || c1=='(' || c1==')')
 						break; //the following symbols indicate the end of the name
 					
 					//printf("%c\n",c1);
 					charcat(tmpString,c1);
+
 
 					c1 = strIn[++i];
 

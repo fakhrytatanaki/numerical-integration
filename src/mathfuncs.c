@@ -4,9 +4,9 @@ const char* mathfunc_names[] = {"pow","exp","ln","sin","cos","sinh","cosh","asin
 const int mathfunc_count = sizeof(mathfunc_names)/sizeof(mathfunc_names[0]);
 
 mathfunc_t** getMathFuncs(){
-	mathfunc_t** funcs = malloc(mathfunc_count*sizeof(void*));
+	mathfunc_t** funcs = (mathfunc_t**) malloc(mathfunc_count*sizeof(void*));
 	for (int i=0;i < mathfunc_count;i++){
-		funcs[i] = malloc(sizeof(mathfunc_t));
+		funcs[i] = (mathfunc_t*) malloc(sizeof(mathfunc_t));
 		funcs[i]->id=MATHFUNC_ID_START+i;
 		funcs[i]->nargs=1;
 	}

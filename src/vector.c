@@ -5,7 +5,7 @@ Vector initVector(int s){
 	Vector v = {
 		.maxSize = s,
 		.count = 0,
-		.data = malloc(s*sizeof(int))
+		.data =(int*) malloc(s*sizeof(int))
 	};
 
 	return v;

@@ -1,4 +1,5 @@
 #include "numerical_integ.h"	
+#include <stdio.h>
 
 double riemann_integ(int a,int b,int n,double (*func)(double)){
 	double diff = b - a;
@@ -15,7 +16,7 @@ double riemann_integ(int a,int b,int n,double (*func)(double)){
 
 double trapez_integ(int a,int b,int n,double (*func)(double)){
 	double diff = b - a;
-	double h = diff/n;
+	double h = diff/(double)n;
 
 	double res;
 	double sum = 0;
@@ -30,7 +31,7 @@ double trapez_integ(int a,int b,int n,double (*func)(double)){
 double simpson_third(int a,int b,int n,double (*func)(double)){
 
 	double diff = b - a;
-	double h = diff/n;
+	double h = diff/(double)n;
 
 	double res;
 	double sum=0;
@@ -47,17 +48,23 @@ double simpson_third(int a,int b,int n,double (*func)(double)){
 }
 
 double simpson_three_eighth(int a,int b,int n,double (*func)(double)){
+	
+	while (n%2==0){
+		printf("\n3/8 integration error : number of segments must be odd\n");
+		printf("please enter an odd value for n to continue:");
+		scanf("%d",&n);
+	}
 
 	double diff = b - a;
-	double h = diff/n;
+	double h = diff/(double)n;
 
 	double res;
 	double sum=0;
 
-	for (int i=1;i < n;i+=3)	
+	for (int i=3;i < n;i+=3)	
 		sum +=  2*func(a+h*i);
 
-	for (int i=1;i < n;i+=3)	
+	for (int i=3;i <= n;i+=3)	
 		sum +=  3*(func(a+h*(i-2)) + func(a+h*(i-1)));
 
 	res = (3.0*h/8.0)*(func(a) + func(b) + sum);
