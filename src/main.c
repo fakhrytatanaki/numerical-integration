@@ -13,7 +13,10 @@ double toBeIntegrated(double input){ //a function that will be integrated
 	//you can remove the parser and put your own hardcoded math function in the place of evaluateFunction
 }
 
-int main(int argc,const char** argv){
+
+
+
+int main(){
 	
 	
 	varTrie = constructVarTrie(1,testvars);
@@ -30,7 +33,10 @@ int main(int argc,const char** argv){
 	out[0]=0; //clearing the string 
 
 	printf("please input an expression : ");
-	fgets(in,512,stdin);	
+
+	fflush(stdin);
+	fgets(in,512,stdin);
+
 	toPostFix(in,out,128,funcTrie,varTrie);
 	inputExp = parsePSString(out); //parse postfix string into postfix expression objects
 
@@ -48,9 +54,10 @@ int main(int argc,const char** argv){
 	printf("D - Simpson's 3/8\n");
 	printf("\nyour option : ");
 
-	fflush(stdin);
+	getchar(); //eats newline
 	sel = getchar();
 
+	printf("VAL:%x\n",sel);
 	printf("\n");
 	printf("computing using ");
 	switch(sel){
